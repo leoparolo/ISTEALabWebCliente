@@ -42,13 +42,12 @@
       </div>
 
       <!-- Estado de carga accesible -->
-      <div id="estado-carga" class="d-flex align-items-center gap-2" role="status" aria-live="polite">
+      <div id="estado-carga" class="d-flex align-items-center gap-2">
         <div class="spinner-border" aria-hidden="true"></div>
         <span>Cargando productos…</span>
       </div>
 
-      <!-- Contenedor de grilla -->
-      <div id="grilla-productos" class="row g-3" hidden></div>
+      <div id="productsContainer" class="row"></div>
 
       <!-- Estado vacío / error -->
       <div id="estado-vacio" class="alert alert-info mt-3 d-none" role="alert"></div>
@@ -64,7 +63,10 @@
   <!-- Bootstrap JS (modal/offcanvas futuros) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-  <script>
+  <script type="module" src="./js/Features/Products/ListProducts.js"></script>
+
+
+  <!-- <script>
     (function () {
       'use strict';
 
@@ -75,58 +77,6 @@
 
       // Utilidad: formato de moneda (USD es la de la API)
       const formatPrice = (value) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'USD' }).format(value);
-
-      // Crea de forma segura elementos de tarjeta
-      function createProductCard(product) {
-        const col = document.createElement('div');
-        col.className = 'col-12 col-sm-6 col-md-4 col-lg-3';
-
-        const card = document.createElement('article');
-        card.className = 'card h-100 shadow-sm product-card';
-        card.tabIndex = 0; // accesible por teclado
-        card.setAttribute('aria-labelledby', `prod-title-${product.id}`);
-
-        // Imagen
-        const img = document.createElement('img');
-        img.src = product.image;
-        img.alt = product.title;
-        img.loading = 'lazy';
-        img.className = 'card-img-top p-3 bg-white';
-
-        // Body
-        const body = document.createElement('div');
-        body.className = 'card-body d-flex flex-column';
-
-        const title = document.createElement('h2');
-        title.id = `prod-title-${product.id}`;
-        title.className = 'card-title h6';
-        title.textContent = product.title;
-
-        const price = document.createElement('p');
-        price.className = 'card-text fw-semibold text-primary mt-auto';
-        price.textContent = formatPrice(product.price);
-
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'btn btn-outline-primary w-100 mt-2';
-        btn.textContent = 'Ver detalles';
-        btn.setAttribute('data-product-id', String(product.id));
-        btn.addEventListener('click', () => {
-          // Próximo punto: abrir modal con detalles.
-          // Por ahora mostramos un aviso no bloqueante para validar flujo.
-          const toast = document.createElement('div');
-          toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-3 alert alert-secondary shadow';
-          toast.role = 'status';
-          toast.textContent = 'En el siguiente paso abriremos un modal con detalles.';
-          document.body.appendChild(toast);
-          setTimeout(() => toast.remove(), 1800);
-        });
-
-        body.append(title, price, btn);
-        card.append(img, body);
-        col.append(card);
-        return col;
-      }
 
       async function loadProducts() {
         try {
@@ -175,6 +125,6 @@
       // Iniciar
       document.addEventListener('DOMContentLoaded', loadProducts);
     })();
-  </script>
+  </script> -->
 </body>
 </html>
