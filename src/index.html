@@ -23,7 +23,12 @@
               <a class="nav-link" href="#productos"><i class="bi bi-grid" aria-hidden="true"></i> Productos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true" href="#"><i class="bi bi-cart3" aria-hidden="true"></i> Carrito</a>
+              <button id="btn-open-cart" type="button" class="nav-link btn btn-link position-relative">
+                <i class="bi bi-cart3" aria-hidden="true"></i>
+                <span class="ms-1">Carrito</span>
+                <span id="cart-badge"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
+              </button>
             </li>
           </ul>
         </div>
@@ -60,10 +65,49 @@
     </div>
   </footer>
 
+  <!-- ========================= -->
+  <!-- OFFCANVAS (FUERA DE MAIN) -->
+  <!-- ========================= -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasCartLabel">Tu carrito</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+      <ul id="cart-list" class="list-group list-group-flush mb-3"></ul>
+      <div class="mt-auto">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <strong>Total</strong>
+          <strong id="cart-total">$0</strong>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="btn-clear-cart" type="button" class="btn btn-outline-danger flex-fill">Vaciar</button>
+          <button type="button" class="btn btn-primary flex-fill">Comprar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ============ -->
+  <!-- TOAST (idem) -->
+  <!-- ============ -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+    <div id="toast-cart" class="toast align-items-center text-bg-success border-0" role="status" aria-live="polite"
+      aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toast-cart-body">
+          Producto agregado al carrito.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+          aria-label="Cerrar"></button>
+      </div>
+    </div>
+  </div>
   <!-- Bootstrap JS (modal/offcanvas futuros) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-  <script type="module" src="./js/Features/Products/ListProducts.js"></script>
+  <script type="module" src="./js/Features/Cart/CartStore.js"></script>
+  <script type="module" src="./js/main.js"></script>
 
 
   <!-- <script>
