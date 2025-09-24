@@ -1,5 +1,5 @@
 // /js/Cart/CartUI.js
-import { getCart, getCount, getTotal, updateQty, removeItem, clearCart } from "./CartStore.js";
+import { getCart, getCount, getTotal, updateQty, removeItem, clearCart } from "./CRUD.js";
 
 const fmt = new Intl.NumberFormat("es-AR", { style: "currency", currency: "USD" });
 
@@ -12,7 +12,7 @@ const btnClear = document.getElementById("btn-clear-cart");
 let offcanvas;
 let toast;
 
-export function initCartUI() {
+export function renderCart() {
     // Badge inicial
     renderBadge();
 
@@ -80,18 +80,18 @@ export function renderOffcanvas() {
             li.innerHTML = `
         <img src="${it.image}" alt="${it.title}" width="48" height="48" class="rounded object-fit-contain">
         <div class="flex-grow-1">
-          <div class="fw-semibold">${it.title}</div>
-          <div class="small text-muted">${fmt.format(it.price)} c/u</div>
+            <div class="fw-semibold">${it.title}</div>
+            <div class="small text-muted">${fmt.format(it.price)} c/u</div>
         </div>
         <div class="btn-group" role="group" aria-label="Cantidad">
-          <button class="btn btn-outline-secondary" data-action="minus" data-id="${it.id}" aria-label="Disminuir">-</button>
-          <span class="btn btn-outline-secondary disabled" aria-live="polite">${it.qty}</span>
-          <button class="btn btn-outline-secondary" data-action="plus" data-id="${it.id}" aria-label="Aumentar">+</button>
+            <button class="btn btn-outline-secondary" data-action="minus" data-id="${it.id}" aria-label="Disminuir">-</button>
+            <span class="btn btn-outline-secondary disabled" aria-live="polite">${it.qty}</span>
+            <button class="btn btn-outline-secondary" data-action="plus" data-id="${it.id}" aria-label="Aumentar">+</button>
         </div>
         <button class="btn btn-outline-danger ms-2" data-action="remove" data-id="${it.id}" aria-label="Quitar">
-          <i class="bi bi-trash"></i>
+            <i class="bi bi-trash"></i>
         </button>
-      `;
+        `;
             frag.appendChild(li);
         }
         cartList.appendChild(frag);

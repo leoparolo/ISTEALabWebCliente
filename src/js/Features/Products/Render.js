@@ -1,5 +1,5 @@
-import { GetProducts } from "../../Repository/ProductRepository.js";
-import { createProductCard } from "./UIProductCard.js";
+import { GetProducts } from "../../Repository/Product.js";
+import { createProductCard } from "./Card.js";
 
 export async function renderProducts(container) {
   const estadoCarga = document.getElementById("estado-carga");

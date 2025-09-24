@@ -1,10 +1,14 @@
-import { initCartUI } from "./Features/Cart/UICart.js";
-import { renderProducts } from "./Features/Products/ListProducts.js";
+import { renderCart } from "./Features/Cart/Render.js";
+import { renderProducts } from "./Features/Products/Render.js";
+import { renderItems } from "./Features/Cart/RenderItem.js";
+import { eventAddToCart } from "./Features/Products/Detail.js"
 
 function start() {
     const container = document.getElementById("products-container");
-    initCartUI();
     renderProducts(container);
+    eventAddToCart();
+    renderCart();
+    renderItems();
 }
 
 if (document.readyState === "loading") {
