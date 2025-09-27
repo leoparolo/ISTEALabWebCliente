@@ -2,3 +2,7 @@
         object-fit: contain;
         height: 180px;
     }
+    .ring-flash {
+        outline: 3px solid rgba(13, 110, 253, .6);
+        transition: outline .2s;
+    }
