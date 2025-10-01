@@ -7,50 +7,75 @@ const cartList = document.getElementById("cart-list");
 const cartTotal = document.getElementById("cart-total");
 const btnOpenCart = document.getElementById("btn-open-cart");
 const btnClear = document.getElementById("btn-clear-cart");
+const btnCheckout = document.getElementById("btn-checkout");       // 👈 nuevo
+const msgBox = document.getElementById("cart-message");            // 👈 nuevo
 
 let offcanvas;
 let toast;
 
 export function renderCart() {
-  renderBadge();
+    renderBadge();
 
-  const el = document.getElementById("offcanvasCart");
-  offcanvas = new bootstrap.Offcanvas(el);
+    const el = document.getElementById("offcanvasCart");
+    offcanvas = new bootstrap.Offcanvas(el);
 
-  const toastEl = document.getElementById("toast-cart");
-  if (toastEl) {
-    toast = new bootstrap.Toast(toastEl, { delay: 2000 });
-  }
-
-  btnOpenCart?.addEventListener("click", () => {
-    renderOffcanvas();
-    offcanvas.show();
-  });
-
-  cartList?.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-action]");
-    if (!btn) return;
-    const id = Number(btn.dataset.id);
-    const action = btn.dataset.action;
-
-    if (action === "plus") {
-      updateQty(id, +1);
-    } else if (action === "minus") {
-      updateQty(id, -1);
-    } else if (action === "remove") {
-      removeItem(id);
+    const toastEl = document.getElementById("toast-cart");
+    if (toastEl) {
+      toast = new bootstrap.Toast(toastEl, { delay: 2000 });
     }
-    renderOffcanvas();
-    renderBadge();
-  });
+    // (Si alguna vez agregás un toast de Bootstrap, podés inicializarlo acá)
+    // const toastEl = document.getElementById("toast-cart");
+    // toast = new bootstrap.Toast(toastEl, { delay: 2000 });
 
-  btnClear?.addEventListener("click", () => {
-    clearCart();
-    renderOffcanvas();
-    renderBadge();
-  });
+    btnOpenCart?.addEventListener("click", () => {
+        hideMessage();
+        renderOffcanvas();
+        offcanvas.show();
+    });
 
-  // Render inicial
+    cartList?.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-action]");
+        if (!btn) return;
+        const id = Number(btn.dataset.id);
+        const action = btn.dataset.action;
+
+        if (action === "plus") updateQty(id, +1);
+        else if (action === "minus") updateQty(id, -1);
+        else if (action === "remove") removeItem(id);
+
+        renderOffcanvas();
+        renderBadge();
+    });
+ 
+    // Eliminar todos: borra productos y limpia LocalStorage
+    btnClear?.addEventListener("click", () => {
+        try {
+            // Vaciar nuestro carrito
+            clearCart();
+            // Limpiar TODO el localStorage (requisito)
+            localStorage.clear();
+            renderOffcanvas();
+            renderBadge();
+            showMessage("Se eliminaron todos los productos y se limpió el almacenamiento.");
+        } catch (err) {
+            console.error(err);
+        }
+    });
+
+    // Finalizar compra: vacía, limpia LocalStorage y muestra confirmación
+    btnCheckout?.addEventListener("click", () => {
+        try {
+            clearCart();
+            localStorage.clear();
+            renderOffcanvas();
+            renderBadge();
+            showMessage("¡Compra realizada con éxito! Gracias por tu pedido.");
+            // Si querés cerrar el offcanvas después de 2s:
+            // setTimeout(() => offcanvas.hide(), 2000);
+        } catch (err) {
+            console.error(err);
+        }
+    });
   renderOffcanvas();
 }
 
@@ -94,7 +119,8 @@ export function renderOffcanvas() {
           <i class="bi bi-trash"></i>
         </button>
       `;
-      frag.appendChild(li);
+            frag.appendChild(li);
+        }
     }
     cartList.appendChild(frag);
   }
@@ -102,8 +128,21 @@ export function renderOffcanvas() {
   cartTotal.textContent = fmt.format(getTotal());
 }
 
+
+function showMessage(text) {
+    if (!msgBox) return;
+    msgBox.textContent = text;
+    msgBox.classList.remove("d-none");
+}
+
+function hideMessage() {
+    if (!msgBox) return;
+    msgBox.classList.add("d-none");
+    msgBox.textContent = "";
+
 export function showAddedToast(message = "Producto agregado al carrito.") {
   const body = document.getElementById("toast-cart-body");
   if (body) body.textContent = message;
   toast?.show();
+
 }
