@@ -97,10 +97,10 @@ export function renderOffcanvas() {
     cartList.innerHTML = `<li class="list-group-item text-center text-muted">Tu carrito está vacío.</li>`;
   } else {
     const frag = document.createDocumentFragment();
+
     for (const it of items) {
       const li = document.createElement("li");
       li.className = "list-group-item d-flex align-items-center gap-2";
-
       const totalItem = it.price * it.qty;
 
       li.innerHTML = `
@@ -119,15 +119,14 @@ export function renderOffcanvas() {
           <i class="bi bi-trash"></i>
         </button>
       `;
-            frag.appendChild(li);
-        }
+      frag.appendChild(li);
     }
+
     cartList.appendChild(frag);
   }
 
   cartTotal.textContent = fmt.format(getTotal());
 }
-
 
 function showMessage(text) {
     if (!msgBox) return;
@@ -139,6 +138,7 @@ function hideMessage() {
     if (!msgBox) return;
     msgBox.classList.add("d-none");
     msgBox.textContent = "";
+}
 
 export function showAddedToast(message = "Producto agregado al carrito.") {
   const body = document.getElementById("toast-cart-body");
