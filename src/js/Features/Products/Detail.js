@@ -1,22 +1,20 @@
 
 
-// Escucha el clic en el botón "Agregar al carrito" del modal
-// y llama a la función addToCart() para guardar el producto en localStorage.
+import { addItem } from "../Cart/CRUD.js";
+import { renderBadge, showAddedToast } from "../Cart/Render.js";
 
-import { addToCart } from "../Cart/LocalStorage.js";
 export function eventAddToCart() {
-    // Cuando se hace clic en el botón del modal...
-    document.getElementById('addToCartBtn').addEventListener('click', function () {
-        // Armamos un objeto con los datos del producto desde los atributos data-* del botón
-        const product = {
-            id: this.dataset.productId,
-            title: this.dataset.productTitle,
-            price: parseFloat(this.dataset.productPrice),
-            image: this.dataset.productImage
-        };
+  document.getElementById('addToCartBtn').addEventListener('click', function () {
+    const product = {
+      id: Number(this.dataset.productId),
+      title: this.dataset.productTitle,
+      price: parseFloat(this.dataset.productPrice),
+      image: this.dataset.productImage
+    };
 
-        // Llamamos a la función que agrega el producto al carrito
-        addToCart(product);
-    });
+    addItem(product);
+    renderBadge();
+    showAddedToast(`${product.title} agregado al carrito.`);
+  });
 }
 

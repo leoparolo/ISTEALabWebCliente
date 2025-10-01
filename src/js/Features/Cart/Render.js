@@ -1,4 +1,3 @@
-// Render.js
 import { getCart, getCount, getTotal, updateQty, removeItem, clearCart } from "./CRUD.js";
 
 const fmt = new Intl.NumberFormat("es-AR", { style: "currency", currency: "USD" });
@@ -20,6 +19,10 @@ export function renderCart() {
     const el = document.getElementById("offcanvasCart");
     offcanvas = new bootstrap.Offcanvas(el);
 
+    const toastEl = document.getElementById("toast-cart");
+    if (toastEl) {
+      toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+    }
     // (Si alguna vez agregás un toast de Bootstrap, podés inicializarlo acá)
     // const toastEl = document.getElementById("toast-cart");
     // toast = new bootstrap.Toast(toastEl, { delay: 2000 });
@@ -43,7 +46,7 @@ export function renderCart() {
         renderOffcanvas();
         renderBadge();
     });
-
+ 
     // Eliminar todos: borra productos y limpia LocalStorage
     btnClear?.addEventListener("click", () => {
         try {
@@ -73,37 +76,42 @@ export function renderCart() {
             console.error(err);
         }
     });
+  renderOffcanvas();
 }
 
 export function renderBadge() {
-    const count = getCount();
-    if (count > 0) {
-        cartBadge.textContent = String(count);
-        cartBadge.classList.remove("d-none");
-    } else {
-        cartBadge.classList.add("d-none");
-    }
+  const count = getCount();
+  if (count > 0) {
+    cartBadge.textContent = String(count);
+    cartBadge.classList.remove("d-none");
+  } else {
+    cartBadge.classList.add("d-none");
+  }
 }
 
 export function renderOffcanvas() {
-    const items = getCart();
-    cartList.replaceChildren();
+  const items = getCart();
+  cartList.replaceChildren();
 
-    if (items.length === 0) {
-        cartList.innerHTML = `<li class="list-group-item text-center text-muted">Tu carrito está vacío.</li>`;
-    } else {
-        const frag = document.createDocumentFragment();
-        for (const it of items) {
-            const li = document.createElement("li");
-            li.className = "list-group-item d-flex align-items-center gap-2";
-            li.innerHTML = `
+  if (items.length === 0) {
+    cartList.innerHTML = `<li class="list-group-item text-center text-muted">Tu carrito está vacío.</li>`;
+  } else {
+    const frag = document.createDocumentFragment();
+    for (const it of items) {
+      const li = document.createElement("li");
+      li.className = "list-group-item d-flex align-items-center gap-2";
+
+      const totalItem = it.price * it.qty;
+
+      li.innerHTML = `
         <img src="${it.image}" alt="${it.title}" width="48" height="48" class="rounded object-fit-contain">
         <div class="flex-grow-1">
           <div class="fw-semibold">${it.title}</div>
           <div class="small text-muted">${fmt.format(it.price)} c/u</div>
+          <div class="small fw-bold text-primary">Total: ${fmt.format(totalItem)}</div>
         </div>
         <div class="btn-group" role="group" aria-label="Cantidad">
-          <button class="btn btn-outline-secondary" data-action="minus" data-id="${it.id}" aria-label="Disminuir">-</button>
+          <button class="btn btn-outline-secondary" data-action="minus" data-id="${it.id}" aria-label="Disminuir" ${it.qty === 1 ? "disabled" : ""}>-</button>
           <span class="btn btn-outline-secondary disabled" aria-live="polite">${it.qty}</span>
           <button class="btn btn-outline-secondary" data-action="plus" data-id="${it.id}" aria-label="Aumentar">+</button>
         </div>
@@ -113,10 +121,13 @@ export function renderOffcanvas() {
       `;
             frag.appendChild(li);
         }
-        cartList.appendChild(frag);
     }
-    cartTotal.textContent = fmt.format(getTotal());
+    cartList.appendChild(frag);
+  }
+
+  cartTotal.textContent = fmt.format(getTotal());
 }
+
 
 function showMessage(text) {
     if (!msgBox) return;
@@ -128,4 +139,10 @@ function hideMessage() {
     if (!msgBox) return;
     msgBox.classList.add("d-none");
     msgBox.textContent = "";
+
+export function showAddedToast(message = "Producto agregado al carrito.") {
+  const body = document.getElementById("toast-cart-body");
+  if (body) body.textContent = message;
+  toast?.show();
+
 }
